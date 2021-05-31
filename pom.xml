@@ -36,8 +36,8 @@
 
         <dependency>
             <groupId>com.icodeyou</groupId>
-            <artifactId>tesla-api</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <artifactId>teslaapi-spring-boot-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

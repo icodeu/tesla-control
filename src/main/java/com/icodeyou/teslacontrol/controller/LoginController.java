@@ -3,35 +3,26 @@
  */
 package com.icodeyou.teslacontrol.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.icodeyou.teslaapi.lib.AuthUtil;
-import com.icodeyou.teslaapi.lib.VehicleUtil;
 import com.icodeyou.teslaapi.lib.WakeUtil;
-import com.icodeyou.teslacontrol.consts.ConstHolder;
+import com.icodeyou.teslaapistarter.service.TeslaService;
 
 @RestController
 @RequestMapping("/login")
 public class LoginController {
 
-    @RequestMapping("/getAccessToken")
-    public String getAccessToken(@RequestParam String email, @RequestParam String password) {
-        String accessToken = AuthUtil.login(email, password);
-        ConstHolder.ACCESS_TOKEN = accessToken;
-        return accessToken;
-    }
+    @Autowired
+    private TeslaService teslaService;
 
     @RequestMapping("/init")
-    public String init(@RequestParam String email, @RequestParam String password) {
-        String accessToken = AuthUtil.login(email, password);
-        ConstHolder.ACCESS_TOKEN = accessToken;
-        Long vehicleId = VehicleUtil.getFirstVehicleId(accessToken);
-        ConstHolder.VEHICLE_ID = vehicleId;
-
-        Boolean isWakeUp = WakeUtil.wakeUp(ConstHolder.ACCESS_TOKEN, ConstHolder.VEHICLE_ID);
-        return isWakeUp ? "success " + accessToken.substring(0, 5) : "登录失败";
+    public String init() {
+        teslaService.initLogin();
+        teslaService.initFirstVehicleId();
+        Boolean isWakeUp = WakeUtil.wakeUp(teslaService.accessToken, teslaService.vehicleId);
+        return isWakeUp ? "success " + teslaService.accessToken.substring(0, 5) : "登录失败";
     }
 
 }

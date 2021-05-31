@@ -1,2 +1,6 @@
 server:
   port: 8999
+
+account:
+  email: youremail@some.com
+  password: yourpassword
